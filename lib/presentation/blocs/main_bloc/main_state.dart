@@ -5,10 +5,10 @@ sealed class MainState {}
 class MainStateLoading extends MainState {}
 
 class MainStateSuccess extends MainState {
-  MainStateSuccess(this.weatherModel, this.weatherHoutlyModel, this.time);
+  MainStateSuccess(this.weatherModel, this.weatherHourlyModel, this.time);
 
   final WeatherModel weatherModel;
-  final WeatherHourlyModel weatherHoutlyModel;
+  final WeatherHourlyModel weatherHourlyModel;
   final DateTime time;
 
   String get description {

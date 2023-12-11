@@ -9,8 +9,8 @@ class Coord {
         lat: json['lat']?.toDouble(),
       );
 
-  final double lon;
-  final double lat;
+  final double? lon;
+  final double? lat;
 
   Map<String, dynamic> toJson() => {
         'lon': lon,

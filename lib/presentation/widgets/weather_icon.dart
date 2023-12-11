@@ -6,7 +6,7 @@ class WeatherIcon extends StatelessWidget {
     required this.id,
     super.key,
     this.scale = 4,
-    this.size = 300,
+    this.size = 200,
   });
   static const url = 'https://openweathermap.org/img/wn/';
   final String id;

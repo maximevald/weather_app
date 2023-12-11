@@ -20,13 +20,13 @@ class HourlyWeatherContainerItem extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          Text('${time.hour}:${time.minute}0'),
           WeatherIcon(
             id: id,
             scale: 2,
             size: 35,
           ),
           TempWidget(temp: temperature),
-          Text('${time.hour}:${time.minute}0'),
         ],
       ),
     );

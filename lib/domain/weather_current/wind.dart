@@ -11,9 +11,9 @@ class Wind {
         gust: json['gust']?.toDouble(),
       );
 
-  final double speed;
-  final int deg;
-  final double gust;
+  final double? speed;
+  final int? deg;
+  final double? gust;
 
   Map<String, dynamic> toJson() => {
         'speed': speed,

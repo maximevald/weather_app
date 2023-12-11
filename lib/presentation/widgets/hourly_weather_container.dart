@@ -11,15 +11,17 @@ class HourlyWeatherContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.blue.shade100,
+      ),
       margin: const EdgeInsets.all(10),
-      padding: const EdgeInsets.all(8),
-      color: Colors.blue.shade100,
       height: 100,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: weatherHourlyModel.list!.take(6).map((weather) {
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 14),
             child: HourlyWeatherContainerItem(
               id: weather.weather!.first.icon,
               temperature: '${weather.main!.temp.ceil()}',

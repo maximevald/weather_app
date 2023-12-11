@@ -6,7 +6,9 @@ import 'package:weather_application/presentation/blocs/language/language_cubit.d
 
 import 'package:weather_application/presentation/blocs/main_bloc/main_bloc.dart';
 import 'package:weather_application/presentation/screens/search_screen.dart';
+import 'package:weather_application/presentation/widgets/daily_weather_container.dart';
 import 'package:weather_application/presentation/widgets/hourly_weather_container.dart';
+import 'package:weather_application/presentation/widgets/last_weather_update.dart';
 import 'package:weather_application/presentation/widgets/temp_widget.dart';
 
 import 'package:weather_application/presentation/widgets/weather_icon.dart';
@@ -16,32 +18,18 @@ class MainBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     final languageCubit = context.read<LanguageCubit>();
+
     return Scaffold(
       appBar: AppBar(
         actions: [
           IconButton(
-            onPressed: () async {
-              final bloc = context.read<MainCubit>();
-              final weatherParams =
-                  await Navigator.of(context).push<WeatherModel>(
-                MaterialPageRoute(
-                  builder: (context) => const SearchScreen(),
-                ),
-              );
-              if (weatherParams != null) {
-                await bloc.setWeatherParams(weatherParams);
-              }
-            },
+            onPressed: () => _search(context),
             icon: const Icon(Icons.search),
           ),
           IconButton(
-            onPressed: () {
-              languageCubit.change(
-                LanguageCode.values
-                    .firstWhere((element) => languageCubit.state != element),
-              );
-            },
+            onPressed: () => _changeLocation(languageCubit),
             icon: Text(languageCubit.state.name.toUpperCase()),
           ),
         ],
@@ -58,23 +46,39 @@ class MainBody extends StatelessWidget {
                 ),
               ),
             final MainStateSuccess success => Center(
-                child: Column(
+                child: ListView(
                   children: [
-                    WeatherIcon(id: success.weatherModel.weather.first.icon),
+                    LastWeatherUpdate(success: success),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        TempWidget(
+                          temp:
+                              success.weatherModel.main.temp.ceil().toString(),
+                          size: 50,
+                        ),
+                        WeatherIcon(
+                          id: success.weatherModel.weather.first.icon,
+                        ),
+                      ],
+                    ),
                     Text(
                       success.weatherModel.name,
                       style: const TextStyle(fontSize: 32),
+                      textAlign: TextAlign.center,
                     ),
                     Text(
                       success.description,
                       style: const TextStyle(fontSize: 22),
-                    ),
-                    TempWidget(
-                      temp: success.weatherModel.main.temp.ceil().toString(),
+                      textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 40),
                     HourlyWeatherContainer(
-                      weatherHourlyModel: success.weatherHoutlyModel,
+                      weatherHourlyModel: success.weatherHourlyModel,
+                    ),
+                    const SizedBox(height: 40),
+                    DailyWeatherContainer(
+                      weatherDailyModel: success.weatherHourlyModel,
                     ),
                   ],
                 ),
@@ -82,6 +86,25 @@ class MainBody extends StatelessWidget {
           };
         },
       ),
+    );
+  }
+
+  Future<void> _search(BuildContext context) async {
+    final cubit = context.read<MainCubit>();
+    final weatherParams = await Navigator.of(context).push<WeatherModel>(
+      MaterialPageRoute(
+        builder: (context) => const SearchScreen(),
+      ),
+    );
+    if (weatherParams != null) {
+      await cubit.setWeatherParams(weatherParams);
+    }
+  }
+
+  void _changeLocation(LanguageCubit languageCubit) {
+    languageCubit.change(
+      LanguageCode.values
+          .firstWhere((element) => languageCubit.state != element),
     );
   }
 }

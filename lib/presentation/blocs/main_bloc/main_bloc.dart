@@ -28,8 +28,11 @@ class MainCubit extends Cubit<MainState> {
       }
     } else {
       try {
-        final coord =
-            await _getCurrentLocation() ?? const Coord(lon: 0, lat: 0);
+        final coord = await _getCurrentLocation().timeout(
+              const Duration(seconds: 7),
+              onTimeout: () => null,
+            ) ??
+            const Coord(lat: 53.89, lon: 27.56);
 
         final (weatherByCoord, weatherByCoordHourly) =
             await _weatherRepository.getWeather(coord);
@@ -72,7 +75,7 @@ class MainCubit extends Cubit<MainState> {
     final lat = locationData.latitude;
     final lon = locationData.longitude;
 
-    return Coord(lon: lon!, lat: lat!);
+    return Coord(lon: lon, lat: lat);
   }
 
   Future<void> setWeatherParams(WeatherModel model) async {
