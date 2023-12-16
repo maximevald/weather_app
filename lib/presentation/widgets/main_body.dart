@@ -18,7 +18,6 @@ class MainBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     final languageCubit = context.read<LanguageCubit>();
 
     return Scaffold(

@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => LanguageCubit(),
+      create: (context) => LanguageCubit(prefs)..loadLanguage(),
       child: BlocBuilder<LanguageCubit, LanguageCode>(
         builder: (context, code) {
           return MultiRepositoryProvider(
